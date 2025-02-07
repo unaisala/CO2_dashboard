@@ -27,15 +27,15 @@ layout = dbc.Container([
         dbc.Col([  # Columna izquierda para selección y datos generales
             dbc.Card([
                 dbc.CardBody([
-                    html.H4("Seleccione un país", className='card-title'),
+                    html.H4("Select a country", className='card-title'),
                     dcc.Dropdown(id='country-selector', options=dropdown_options_countries, value=countries[0],
-                                 placeholder='Seleccione un país')
+                                 placeholder='Select a country')
                 ], style={'background-color': 'white', 'border-radius': '4px'})
             ], className='mb-4'),
             
             dbc.Card([
                 dbc.CardBody([
-                    html.H5("Cambio porcentual desde 2015", className='card-title text-center'),
+                    html.H5("Percentage change in emissions since 2015 (Paris Agreement)", className='card-title text-center'),
                     html.Div(
                         id='percentage-change', 
                         style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center', 'height': '85px'}
@@ -45,7 +45,7 @@ layout = dbc.Container([
             
             dbc.Card([
                 dbc.CardBody([
-                    html.H5("Ranking de consumo per cápita", className='card-title text-center'),
+                    html.H5("Per capita emissions ranking", className='card-title text-center'),
                     html.Div(id='ranking-position', style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center', 'height': '85px'})
                 ], style={'background-color': 'white', 'border-radius': '4px'})
             ])
@@ -108,16 +108,16 @@ def update_graph_country(selected_country):
     ranking = data_hoja2_sorted[data_hoja2_sorted['Country'] == selected_country]
     if not ranking.empty:
         rank_position = ranking.index[0] + 1  # Sumar 1 porque los índices comienzan en 0
-        rank_text = html.Div([html.P(f"Puesto nº{rank_position}", style={'font-size': '2rem', 'font-weight': 'bold'})], 
+        rank_text = html.Div([html.P(f"Rank nº{rank_position}", style={'font-size': '2rem', 'font-weight': 'bold'})], 
                              style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center'})
     else:
-        rank_text = "Sin datos"
+        rank_text = "No data"
 
     # Crear gráfico de línea
     fig_country = px.line(
         df_country, x='Year', y='CO2 Emissions',
-        title=f'Emisiones de CO₂ en {selected_country} por año',
-        labels={'CO2 Emissions': 'Emisiones CO₂ (toneladas)'}
+        title=f'Yearly CO₂ Emissions in {selected_country}',
+        labels={'CO2 Emissions': 'CO₂ Emissions (in megatons)'}
     )
 
     return fig_country, html.Div([icon, percentage_text], style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}), rank_text

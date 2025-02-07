@@ -40,7 +40,7 @@ resto_mundo = total_emissions - total_top_5
 # Datos para el gráfico de pastel
 pie_data = pd.concat([ 
     top_5_countries[['Country', latest_year]].assign(Category='Top 5 Países'),
-    pd.DataFrame({'Country': ['Resto del Mundo'], 'Category': ['Resto del Mundo'], latest_year: [resto_mundo]})
+    pd.DataFrame({'Country': ['Rest of the World'], 'Category': ['Rest of the World'], latest_year: [resto_mundo]})
 ])
 
 # Crear gráfico de pie (Pie Chart)
@@ -48,7 +48,6 @@ fig_pie = px.pie(
     pie_data,
     names='Country',
     values=latest_year,
-    title=f"Porcentaje de Emisiones: Top 5 Países vs. Resto del Mundo ({latest_year})",
     labels={latest_year: 'Emisiones (Mt CO₂)'},
     hole=0.3,  # Esto crea un gráfico de "donut" (dona)
 )
@@ -64,11 +63,14 @@ layout = dbc.Container([
         # Columna para la tabla
         dbc.Col([ 
             html.P(f"Ranking of CO₂ emissions in {latest_year} (units in Megatons).", 
-                   className="text-center"),
+                className="text-center"),
             dash_table.DataTable(
                 id="co2-ranking",
-                columns=[{"name": str(col), "id": str(col)} for col in top_10_countries.columns],  # Aseguramos que los nombres son strings
-                data=top_10_countries.to_dict("records"),
+                columns=[
+                    {"name": "Country", "id": "Country"},
+                    {"name": f"CO₂ Emissions ({latest_year})", "id": str(latest_year)}  # Convertir el año a string
+                ],  # Define las columnas explícitamente
+                data=top_10_countries[['Country', latest_year]].to_dict("records"),  # Solo usa Country y las emisiones
                 style_table={"overflowX": "auto"},
                 style_header={"backgroundColor": "#255db8", "color": "white", "fontWeight": "bold"},
                 style_data={"backgroundColor": "white", "color": "black"},
@@ -78,7 +80,7 @@ layout = dbc.Container([
         
         # Columna para el gráfico de pie
         dbc.Col([ 
-            html.P(f"Porcentaje de emisiones: Top 5 Países vs. Resto del Mundo en {latest_year} (en Megatoneladas)", className="text-center"),
+            html.P(f"Emissions comparison: Top 5 Countries vs. Rest of the World in {latest_year} (Megatons)", className="text-center"),
             dcc.Graph(
                 id="co2-pie-chart",
                 figure=fig_pie

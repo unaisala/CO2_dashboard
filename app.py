@@ -40,7 +40,7 @@ navbar = html.Div([
                 dbc.Nav([
                     dcc.Link("Home", href="/", style=NAV_LINK_STYLE, className="nav-item"),
                     dcc.Link("Country Emissions", href="/emisiones-totales", style=NAV_LINK_STYLE, className="nav-item"),
-                    dcc.Link("Year Emissions", href="/emisiones-per-capita", style=NAV_LINK_STYLE, className="nav-item"),
+                    dcc.Link("Year Emissions", href="/emisiones-year", style=NAV_LINK_STYLE, className="nav-item"),
                 ], className="d-flex gap-3 justify-content-end"),
                 width=True
             )
